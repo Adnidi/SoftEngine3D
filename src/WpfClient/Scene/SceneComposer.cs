@@ -4,7 +4,7 @@ using SoftEngine3D.Imaging;
 using SoftEngine3D.Primitives;
 using SoftEngine3D.Utility;
 
-namespace SoftEngineClient
+namespace WpfClient.Scene
 {
     public class SceneComposer
     {
@@ -16,7 +16,7 @@ namespace SoftEngineClient
         {
             _renderer = new Renderer();
 
-            _meshes = MeshImporter.LoadBabylonFile($@"..\..\..\Data\untitled.babylon");
+            _meshes = MeshImporter.LoadBabylonFile($@"..\..\..\Data\coloredSuzanne.babylon");
             _camera = new Camera
             {
                 Position = new Vector3(0, 0, 10),
@@ -32,8 +32,8 @@ namespace SoftEngineClient
             foreach (var mesh in _meshes)
             {
                 mesh.Rotation = new Vector3(
-                    mesh.Rotation.X + (0.01f),
-                    mesh.Rotation.Y + (0.01f),
+                    mesh.Rotation.X ,
+                    mesh.Rotation.Y + (0.1f),
                     mesh.Rotation.Z);
             }
 

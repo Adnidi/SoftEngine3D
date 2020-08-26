@@ -45,13 +45,13 @@ namespace SoftEngine3D.Imaging
                     var pixelB = Project(vertexB.Position, transformMatrix);
                     var pixelC = Project(vertexC.Position, transformMatrix);
 
-                    DrawLine(pixelA, pixelB, vertexA.Color, vertexB.Color);
-                    DrawLine(pixelB, pixelC, vertexB.Color, vertexC.Color);
-                    DrawLine(pixelC, pixelA, vertexC.Color, vertexA.Color);
+                    //DrawLine(pixelA, pixelB, vertexA.Color, vertexB.Color);
+                    //DrawLine(pixelB, pixelC, vertexB.Color, vertexC.Color);
+                    //DrawLine(pixelC, pixelA, vertexC.Color, vertexA.Color);
 
-                    //DrawLineBresenham(pixelA, pixelB);
-                    //DrawLineBresenham(pixelB, pixelC);
-                    //DrawLineBresenham(pixelC, pixelA);
+                    DrawLineBresenham(pixelA, pixelB, vertexA.Color, vertexB.Color);
+                    DrawLineBresenham(pixelB, pixelC, vertexB.Color, vertexC.Color);
+                    DrawLineBresenham(pixelC, pixelA, vertexC.Color, vertexA.Color);
                 }
             }
         }
@@ -105,9 +105,8 @@ namespace SoftEngine3D.Imaging
             return (byte) newValue;
         }
 
-        public void DrawLineBresenham(Vector2 point0, Vector2 point1)
+        public void DrawLineBresenham(Vector2 point0, Vector2 point1, Color c0, Color c1)
         {
-            //TODO: color interpolation
             int x0 = (int)point0.X;
             int y0 = (int)point0.Y;
             int x1 = (int)point1.X;
@@ -119,9 +118,25 @@ namespace SoftEngine3D.Imaging
             var sy = (y0 < y1) ? 1 : -1;
             var err = dx - dy;
 
+            var totalDistance = (point0 - point1).Length;
+
             while (true)
             {
-                DrawPoint(new Vector2(x0, y0), Color.Yellow);
+                var pointToDraw = new Vector2(x0, y0);
+                var distanceToP0 = (pointToDraw - point0).Length;
+                var ratioCovered = distanceToP0 / totalDistance;
+
+                if (ratioCovered < 0) ratioCovered = 0;
+                if (ratioCovered > 1) ratioCovered = 1;
+
+                var colorToDraw = Color
+                    .FromArgb(
+                        (int) (c0.A * (1-ratioCovered) + c1.A * ratioCovered),
+                        (int) (c0.R * (1-ratioCovered) + c1.R * ratioCovered),
+                        (int) (c0.G * (1-ratioCovered) + c1.G * ratioCovered),
+                        (int) (c0.B * (1-ratioCovered) + c1.B * ratioCovered));
+
+                DrawPoint(pointToDraw, colorToDraw);
 
                 if ((x0 == x1) && (y0 == y1)) break;
                 var e2 = 2 * err;

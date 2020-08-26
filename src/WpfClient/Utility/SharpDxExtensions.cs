@@ -1,6 +1,6 @@
 ﻿using SoftEngine3D.Primitives;
 
-namespace SoftEngineClient
+namespace WpfClient.Utility
 {
     public static class SharpDxExtensions
     {

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1180" Width="2020">
+        Title="MainWindow" Height="480" Width="640">
     <Grid>
-        <Image Width="1920" Height="1080" Name="ImageControl"></Image>
+        <Image Width="640" Height="480" Name="ImageControl"></Image>
     </Grid>
 </Window>
