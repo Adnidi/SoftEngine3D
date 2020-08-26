@@ -1,9 +1,11 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace SoftEngineClient
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             var scene = new SceneComposer();

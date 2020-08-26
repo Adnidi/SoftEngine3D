@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftEngine3D", "SoftEngine3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftEngineClient", "Application\SoftEngineClient.csproj", "{3BCA65D1-ACBA-4B1D-8C42-732144E17098}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClient", "WpfClient\WpfClient.csproj", "{A385E411-FD2E-4EDC-94C5-CF247275AED8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3BCA65D1-ACBA-4B1D-8C42-732144E17098}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BCA65D1-ACBA-4B1D-8C42-732144E17098}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BCA65D1-ACBA-4B1D-8C42-732144E17098}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A385E411-FD2E-4EDC-94C5-CF247275AED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A385E411-FD2E-4EDC-94C5-CF247275AED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A385E411-FD2E-4EDC-94C5-CF247275AED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A385E411-FD2E-4EDC-94C5-CF247275AED8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
