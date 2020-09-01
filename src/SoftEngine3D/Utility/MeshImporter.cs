@@ -34,7 +34,7 @@ namespace SoftEngine3D.Utility
                 for (var index = 0; index < verticesCount; index++)
                 {
                     var x = (float)verticesArray[index * verticesStep].Value;
-                    var y = (float)verticesArray[index * verticesStep + 1].Value;
+                    var y = -(float)verticesArray[index * verticesStep + 1].Value;
                     var z = (float)verticesArray[index * verticesStep + 2].Value;
 
                     var r = (int)(colorArray[index * 4].Value * 255);
