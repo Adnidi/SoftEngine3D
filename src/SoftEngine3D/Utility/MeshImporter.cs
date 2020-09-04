@@ -18,6 +18,7 @@ namespace SoftEngine3D.Utility
             foreach (var meshObject in jsonObject.meshes)
             {
                 var verticesArray = meshObject.positions;
+                var normalsArray = meshObject.normals;
                 var colorArray = meshObject.colors;
                 // Faces
                 var indicesArray = meshObject.indices;
@@ -37,6 +38,10 @@ namespace SoftEngine3D.Utility
                     var y = -(float)verticesArray[index * verticesStep + 1].Value;
                     var z = (float)verticesArray[index * verticesStep + 2].Value;
 
+                    var nx = (float)normalsArray[index * verticesStep].Value;
+                    var ny = -(float)normalsArray[index * verticesStep + 1].Value;
+                    var nz = (float)normalsArray[index * verticesStep + 2].Value;
+
                     var r = (int)(colorArray[index * 4].Value * 255);
                     var b = (int)(colorArray[index * 4 + 1].Value * 255);
                     var g = (int)(colorArray[index * 4 + 2].Value * 255);
@@ -48,7 +53,11 @@ namespace SoftEngine3D.Utility
                         b,
                         g);
 
-                    mesh.Vertices.Add(new Vertex(new Vector3(x, y, z), color));
+                    var vertex = new Vertex(new Vector3(x, y, z), color)
+                    {
+                        NormalVector = new Vector3(nx, ny, nz)
+                    };
+                    mesh.Vertices.Add(vertex);
                 }
 
                 // Then filling the Faces array
