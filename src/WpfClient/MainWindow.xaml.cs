@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
@@ -14,9 +15,13 @@ namespace WpfClient
     {
         private SceneComposer sceneComposer = new SceneComposer();
 
+        private DateTime previousRenderTime = DateTime.Now;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            this.Title = "3D Softengine";
 
             this.Loaded += Page_Loaded;
         }
@@ -30,6 +35,10 @@ namespace WpfClient
 
         void CompositionTarget_Rendering(object sender, object e)
         {
+            var time = DateTime.Now;
+            this.Title = $"3D Softengine - {1000.0 / (time - previousRenderTime).TotalMilliseconds:0.00} fps";
+            previousRenderTime = time;
+
             var args = e as RenderingEventArgs;
 
             var bitMap = sceneComposer
