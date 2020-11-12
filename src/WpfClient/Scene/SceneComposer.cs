@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
 using SoftEngine3D.Imaging;
 using SoftEngine3D.Primitives;
 using SoftEngine3D.Utility;

@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SoftEngine3D")]
+[assembly: AssemblyTitle("SoftEngine3DTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SoftEngine3D")]
+[assembly: AssemblyProduct("SoftEngine3DTests")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("74267c75-22b3-43ae-9502-34d96a2068e7")]
+[assembly: Guid("28ca2c19-5918-40da-89d6-09f0e023c604")]
 
 // Version information for an assembly consists of the following four values:
 //
