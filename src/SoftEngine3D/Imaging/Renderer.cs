@@ -11,6 +11,7 @@ namespace SoftEngine3D.Imaging
     {
         private Bitmap workingBitmap;
         private ZBuffer zBuffer;
+        private PointDrawingAlgorithm pointDrawingAlgorithm;
 
         public void RenderLine(Camera camera, Bitmap bmp, params Mesh[] meshes)
         {
@@ -24,6 +25,11 @@ namespace SoftEngine3D.Imaging
                 (float)workingBitmap.Size.Width / workingBitmap.Size.Height,
                 0.01f,
                 1.0f);
+
+            var lineDrawingAlgorithm = new BresenhamLineDrawingAlgorithm(
+                new PointDrawingAlgorithm(
+                    workingBitmap,
+                    zBuffer));
 
             foreach (Mesh mesh in meshes)
             {
@@ -45,9 +51,9 @@ namespace SoftEngine3D.Imaging
                     var vertexBTransformed = Project(vertexB, transformMatrix, worldMatrix);
                     var vertexCTransformed = Project(vertexC, transformMatrix, worldMatrix);
 
-                    DrawLineBresenham(vertexATransformed.RelativePosition, vertexBTransformed.RelativePosition, vertexA.Color, vertexB.Color);
-                    DrawLineBresenham(vertexBTransformed.RelativePosition, vertexCTransformed.RelativePosition, vertexB.Color, vertexC.Color);
-                    DrawLineBresenham(vertexCTransformed.RelativePosition, vertexATransformed.RelativePosition, vertexC.Color, vertexA.Color);
+                    lineDrawingAlgorithm.DrawLine(vertexATransformed.RelativePosition, vertexBTransformed.RelativePosition, vertexA.Color, vertexB.Color);
+                    lineDrawingAlgorithm.DrawLine(vertexBTransformed.RelativePosition, vertexCTransformed.RelativePosition, vertexB.Color, vertexC.Color);
+                    lineDrawingAlgorithm.DrawLine(vertexCTransformed.RelativePosition, vertexATransformed.RelativePosition, vertexC.Color, vertexA.Color);
                 }
             }
         }
@@ -57,8 +63,8 @@ namespace SoftEngine3D.Imaging
             workingBitmap = bmp;
 
             zBuffer = new ZBuffer(workingBitmap.Size.Width, workingBitmap.Size.Height);
-                
-                
+
+            pointDrawingAlgorithm = new PointDrawingAlgorithm(workingBitmap, zBuffer);
 
             var viewMatrix = MatrixPrefabs.LookAtLeftHanded(camera.Position, camera.Target, Vector3Prefabs.UnitY);
             var projectionMatrix = MatrixPrefabs.PerspectiveFieldOfViewRightHanded(
@@ -76,12 +82,6 @@ namespace SoftEngine3D.Imaging
                                   MatrixPrefabs.TranslationMatrix(mesh.Position);
 
                 var transformMatrix = worldMatrix * viewMatrix * projectionMatrix;
-
-                //foreach (var vertex in mesh.Vertices)
-                //{
-                //    var point = Project(vertex.RelativePosition, transformMatrix);
-                //    DrawPoint(point, vertex.Color);
-                //}
 
                 foreach (var face in mesh.Faces)
                 {
@@ -124,92 +124,7 @@ namespace SoftEngine3D.Imaging
             };
         }
 
-        private void DrawPoint(Vector3 point, Color color)
-        {
-            
-
-            if (point.X >= 0 && point.Y >= 0 && point.X < workingBitmap.Size.Width && point.Y < workingBitmap.Size.Height)
-            {
-                if (zBuffer[(int) point.X, (int) point.Y] > point.Z)
-                {
-                    workingBitmap.SetPixel((int)point.X, (int)point.Y, color);
-
-                    zBuffer[(int) point.X, (int) point.Y] = point.Z;
-                }
-            }
-        }
-
-        private void DrawLine(Vector3 point0, Vector3 point1, Color color0, Color color1)
-        {
-            var dist = (point1 - point0).Length;
-
-            if (dist < 2)
-                return;
-
-            Vector3 middlePoint = point0 + (point1 - point0) / 2;
-            var midColor = InterpolateColor(color0, color1);
-
-            DrawPoint(middlePoint, midColor);
-
-            DrawLine(point0, middlePoint, color0, midColor);
-            DrawLine(middlePoint, point1, midColor, color1);
-        }
-
-        private Color InterpolateColor(Color c0, Color c1)
-        {
-            return Color.FromArgb(
-                InterpolateBytes(c0.A, c1.A),
-                InterpolateBytes(c0.R, c1.R),
-                InterpolateBytes(c0.G, c1.G),
-                InterpolateBytes(c0.B, c1.B));
-        }
-
-        private byte InterpolateBytes(byte b0, byte b1)
-        {
-            var newValue = ((int) b0 + (int) b1) / 2;
-
-            return (byte) newValue;
-        }
-
-        public void DrawLineBresenham(Vector3 point0, Vector3 point1, Color c0, Color c1)
-        {
-            int x0 = (int)point0.X;
-            int y0 = (int)point0.Y;
-            int x1 = (int)point1.X;
-            int y1 = (int)point1.Y;
-
-            var dx = Math.Abs(x1 - x0);
-            var dy = Math.Abs(y1 - y0);
-            var sx = (x0 < x1) ? 1 : -1;
-            var sy = (y0 < y1) ? 1 : -1;
-            var err = dx - dy;
-
-            var totalDistance = (point0 - point1).Length;
-
-            while (true)
-            {
-                var pointToDraw = new Vector3(x0, y0, 0);
-                var distanceToP0 = (pointToDraw - point0).Length;
-                var ratioCovered = distanceToP0 / totalDistance;
-
-                if (ratioCovered < 0) ratioCovered = 0;
-                if (ratioCovered > 1) ratioCovered = 1;
-
-                var colorToDraw = Color
-                    .FromArgb(
-                        (int) (c0.A * (1-ratioCovered) + c1.A * ratioCovered),
-                        (int) (c0.R * (1-ratioCovered) + c1.R * ratioCovered),
-                        (int) (c0.G * (1-ratioCovered) + c1.G * ratioCovered),
-                        (int) (c0.B * (1-ratioCovered) + c1.B * ratioCovered));
-
-                DrawPoint(pointToDraw, colorToDraw);
-
-                if ((x0 == x1) && (y0 == y1)) break;
-                var e2 = 2 * err;
-                if (e2 > -dy) { err -= dy; x0 += sx; }
-                if (e2 < dx) { err += dx; y0 += sy; }
-            }
-        }
+        
 
         public void DrawTriangle(Vertex v1, Vertex v2, Vertex v3, IEnumerable<LightSource> lights)
         {
@@ -364,7 +279,7 @@ namespace SoftEngine3D.Imaging
                     (int) ((a.Color.G * partColorA + b.Color.G * partColorB + c.Color.G * partColorC) * lightAngle),
                     (int) ((a.Color.B * partColorA + b.Color.B * partColorB + c.Color.B * partColorC) * lightAngle));
 
-                DrawPoint(pointToDraw, color);
+                pointDrawingAlgorithm.DrawPoint(pointToDraw, color);
             }
         }
 

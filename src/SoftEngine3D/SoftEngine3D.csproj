@@ -45,7 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Imaging\BresenhamLineDrawingAlgorithm.cs" />
+    <Compile Include="Imaging\ILineDrawingAlgorithm.cs" />
+    <Compile Include="Imaging\InterpolationHelpers.cs" />
+    <Compile Include="Imaging\LineDrawingAlgorithm.cs" />
+    <Compile Include="Imaging\PointDrawingAlgorithm.cs" />
     <Compile Include="Imaging\Renderer.cs" />
+    <Compile Include="Imaging\SimpleLineDrawingAlgorithm.cs" />
     <Compile Include="Imaging\ZBuffer.cs" />
     <Compile Include="Primitives\Camera.cs" />
     <Compile Include="Primitives\Face.cs" />
