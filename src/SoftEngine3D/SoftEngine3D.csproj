@@ -48,6 +48,8 @@
     <Compile Include="Imaging\Renderer.cs" />
     <Compile Include="Primitives\Camera.cs" />
     <Compile Include="Primitives\Face.cs" />
+    <Compile Include="Primitives\Lighting\LightSource.cs" />
+    <Compile Include="Primitives\Lighting\PointLightSource.cs" />
     <Compile Include="Primitives\Matrix4x4.cs" />
     <Compile Include="Primitives\Mesh.cs" />
     <Compile Include="Primitives\Vector2.cs" />
@@ -60,5 +62,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

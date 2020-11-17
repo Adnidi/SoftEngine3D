@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using SoftEngine3D.Primitives;
+using SoftEngine3D.Primitives.Lighting;
 
 namespace SoftEngine3D.Imaging
 {
@@ -56,7 +59,7 @@ namespace SoftEngine3D.Imaging
             }
         }
 
-        public void Render(Camera camera, Bitmap bmp, params Mesh[] meshes)
+        public void Render(Camera camera, Bitmap bmp, IEnumerable<LightSource> lightSources, params Mesh[] meshes)
         {
             _workingBitmap = bmp;
 
@@ -110,7 +113,7 @@ namespace SoftEngine3D.Imaging
                     //DrawLineBresenham(pixelB, pixelC, vertexB.Color, vertexC.Color);
                     //DrawLineBresenham(pixelC, pixelA, vertexC.Color, vertexA.Color);
 
-                    DrawTriangle(vertexATransformed, vertexBTransformed, vertexCTransformed);
+                    DrawTriangle(vertexATransformed, vertexBTransformed, vertexCTransformed, lightSources);
                 }
             }
         }
@@ -220,7 +223,7 @@ namespace SoftEngine3D.Imaging
             }
         }
 
-        public void DrawTriangle(Vertex v1, Vertex v2, Vertex v3)
+        public void DrawTriangle(Vertex v1, Vertex v2, Vertex v3, IEnumerable<LightSource> lights)
         {
             // sort by y coordinate
             if (v1.RelativePosition.Y > v2.RelativePosition.Y)
@@ -249,7 +252,7 @@ namespace SoftEngine3D.Imaging
             Vector3 vnFace = (v1.NormalVector + v2.NormalVector + v3.NormalVector) / 3;
             Vector3 centerPoint = (v1.WorldPosition + v2.WorldPosition + v3.WorldPosition) / 3;
             // Light position 
-            Vector3 lightPos = new Vector3(100, 100, 10);
+            Vector3 lightPos = lights.FirstOrDefault().Position ?? new Vector3();
             // computing the cos of the angle between the light vector and the normal vector
             // it will return a value between 0 and 1 that will be used as the intensity of the color
             float ndotl = ComputeNDotL(centerPoint, vnFace, lightPos);

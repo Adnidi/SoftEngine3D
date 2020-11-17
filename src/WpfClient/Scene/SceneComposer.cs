@@ -3,7 +3,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using SoftEngine3D.Imaging;
 using SoftEngine3D.Primitives;
+using SoftEngine3D.Primitives.Lighting;
 using SoftEngine3D.Utility;
+using Camera = SoftEngine3D.Primitives.Camera;
 
 namespace WpfClient.Scene
 {
@@ -62,7 +64,14 @@ namespace WpfClient.Scene
                     mesh.Rotation.Z);
             }
 
-            _renderer.Render(_camera, bm, _meshes);
+            var lights = new List<LightSource>
+            {
+                new PointLightSource(
+                    new Vector3(10, 10, 10),
+                    Color.White)
+            };
+
+            _renderer.Render(_camera, bm, lights, _meshes);
 
             return bm;
         }
