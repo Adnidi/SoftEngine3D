@@ -9,26 +9,19 @@ namespace SoftEngine3D.Imaging
 {
     public class Renderer
     {
-        private Bitmap _workingBitmap;
-        private float[,] zBuffer;
+        private Bitmap workingBitmap;
+        private ZBuffer zBuffer;
 
         public void RenderLine(Camera camera, Bitmap bmp, params Mesh[] meshes)
         {
-            _workingBitmap = bmp;
+            workingBitmap = bmp;
 
-            zBuffer = new float[_workingBitmap.Size.Width, _workingBitmap.Size.Height];
-            for (var i = 0; i < zBuffer.GetLength(0); i++)
-            {
-                for (var j = 0; j < zBuffer.GetLength(1); ++j)
-                {
-                    zBuffer[i, j] = float.MaxValue;
-                }
-            }
+            zBuffer = new ZBuffer(workingBitmap.Size.Width, workingBitmap.Size.Height);
 
             var viewMatrix = MatrixPrefabs.LookAtLeftHanded(camera.Position, camera.Target, Vector3Prefabs.UnitY);
             var projectionMatrix = MatrixPrefabs.PerspectiveFieldOfViewRightHanded(
                 0.78f,
-                (float)_workingBitmap.Size.Width / _workingBitmap.Size.Height,
+                (float)workingBitmap.Size.Width / workingBitmap.Size.Height,
                 0.01f,
                 1.0f);
 
@@ -61,21 +54,16 @@ namespace SoftEngine3D.Imaging
 
         public void Render(Camera camera, Bitmap bmp, IEnumerable<LightSource> lightSources, params Mesh[] meshes)
         {
-            _workingBitmap = bmp;
+            workingBitmap = bmp;
 
-            zBuffer = new float[_workingBitmap.Size.Width, _workingBitmap.Size.Height];
-            for (var i = 0; i < zBuffer.GetLength(0); i++)
-            {
-                for (var j = 0; j < zBuffer.GetLength(1); ++j)
-                {
-                    zBuffer[i, j] = float.MaxValue;
-                }
-            }
+            zBuffer = new ZBuffer(workingBitmap.Size.Width, workingBitmap.Size.Height);
+                
+                
 
             var viewMatrix = MatrixPrefabs.LookAtLeftHanded(camera.Position, camera.Target, Vector3Prefabs.UnitY);
             var projectionMatrix = MatrixPrefabs.PerspectiveFieldOfViewRightHanded(
                 0.78f,
-                (float)_workingBitmap.Size.Width / _workingBitmap.Size.Height,
+                (float)workingBitmap.Size.Width / workingBitmap.Size.Height,
                 0.01f,
                 1.0f);
 
@@ -125,8 +113,8 @@ namespace SoftEngine3D.Imaging
             var pointInWorld = vertex.RelativePosition.LeftTransformWithMatrix(worldMatrix);
             var normalInWorld = vertex.NormalVector.LeftTransformWithMatrix(transformationMatrix);
 
-            var x = point.X * _workingBitmap.Size.Width + _workingBitmap.Size.Width / 2.0f;
-            var y = -point.Y * _workingBitmap.Size.Height + _workingBitmap.Size.Height / 2.0f;
+            var x = point.X * workingBitmap.Size.Width + workingBitmap.Size.Width / 2.0f;
+            var y = -point.Y * workingBitmap.Size.Height + workingBitmap.Size.Height / 2.0f;
             return new Vertex
             {
                 Color = vertex.Color,
@@ -140,11 +128,11 @@ namespace SoftEngine3D.Imaging
         {
             
 
-            if (point.X >= 0 && point.Y >= 0 && point.X < _workingBitmap.Size.Width && point.Y < _workingBitmap.Size.Height)
+            if (point.X >= 0 && point.Y >= 0 && point.X < workingBitmap.Size.Width && point.Y < workingBitmap.Size.Height)
             {
                 if (zBuffer[(int) point.X, (int) point.Y] > point.Z)
                 {
-                    _workingBitmap.SetPixel((int)point.X, (int)point.Y, color);
+                    workingBitmap.SetPixel((int)point.X, (int)point.Y, color);
 
                     zBuffer[(int) point.X, (int) point.Y] = point.Z;
                 }

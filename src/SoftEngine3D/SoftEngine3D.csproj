@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Imaging\Renderer.cs" />
+    <Compile Include="Imaging\ZBuffer.cs" />
     <Compile Include="Primitives\Camera.cs" />
     <Compile Include="Primitives\Face.cs" />
     <Compile Include="Primitives\Lighting\LightSource.cs" />
